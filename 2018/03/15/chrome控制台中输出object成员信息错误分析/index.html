@@ -87,21 +87,21 @@
 
 
 
-<meta name="description" content="偶然间在用chrome调试时发现一个。小小的问题，代码如下 1234let a = &amp;#123;key1: &apos;val1&apos;, key2: &apos;val2&apos;&amp;#125;console.log(a)a.key3 = &apos;val3&apos;console.log(a) 问题当然不会是console输出什么，奇怪的点在于下边这个三角符号  看起来似乎没有什么问题，那么打开呢？">
+<meta name="description" content="偶然间在用chrome调试时发现一个小小的问题，代码如下 1234let a = &amp;#123;key1: &apos;val1&apos;, key2: &apos;val2&apos;&amp;#125;console.log(a)a.key3 = &apos;val3&apos;console.log(a) 问题当然不会是console输出什么，奇怪的点在于下边这个三角符号  看起来似乎没有什么问题，那么打开呢？">
 <meta name="keywords" content="js,object">
 <meta property="og:type" content="article">
 <meta property="og:title" content="chrome控制台中输出object成员信息错误分析">
 <meta property="og:url" content="http://yoursite.com/2018/03/15/chrome控制台中输出object成员信息错误分析/index.html">
 <meta property="og:site_name" content="Wild World">
-<meta property="og:description" content="偶然间在用chrome调试时发现一个。小小的问题，代码如下 1234let a = &amp;#123;key1: &apos;val1&apos;, key2: &apos;val2&apos;&amp;#125;console.log(a)a.key3 = &apos;val3&apos;console.log(a) 问题当然不会是console输出什么，奇怪的点在于下边这个三角符号  看起来似乎没有什么问题，那么打开呢？">
+<meta property="og:description" content="偶然间在用chrome调试时发现一个小小的问题，代码如下 1234let a = &amp;#123;key1: &apos;val1&apos;, key2: &apos;val2&apos;&amp;#125;console.log(a)a.key3 = &apos;val3&apos;console.log(a) 问题当然不会是console输出什么，奇怪的点在于下边这个三角符号  看起来似乎没有什么问题，那么打开呢？">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/1803/chrome/key.png">
 <meta property="og:image" content="http://yoursite.com/images/1803/chrome/key-open.png">
 <meta property="og:image" content="http://yoursite.com/images/1803/chrome/key-open2.png">
-<meta property="og:updated_time" content="2018-03-15T03:18:22.491Z">
+<meta property="og:updated_time" content="2018-03-15T04:23:29.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="chrome控制台中输出object成员信息错误分析">
-<meta name="twitter:description" content="偶然间在用chrome调试时发现一个。小小的问题，代码如下 1234let a = &amp;#123;key1: &apos;val1&apos;, key2: &apos;val2&apos;&amp;#125;console.log(a)a.key3 = &apos;val3&apos;console.log(a) 问题当然不会是console输出什么，奇怪的点在于下边这个三角符号  看起来似乎没有什么问题，那么打开呢？">
+<meta name="twitter:description" content="偶然间在用chrome调试时发现一个小小的问题，代码如下 1234let a = &amp;#123;key1: &apos;val1&apos;, key2: &apos;val2&apos;&amp;#125;console.log(a)a.key3 = &apos;val3&apos;console.log(a) 问题当然不会是console输出什么，奇怪的点在于下边这个三角符号  看起来似乎没有什么问题，那么打开呢？">
 <meta name="twitter:image" content="http://yoursite.com/images/1803/chrome/key.png">
 
 
@@ -379,14 +379,14 @@
       
 
       
-        <p>偶然间在用chrome调试时发现一个。小小的问题，代码如下</p>
+        <p>偶然间在用chrome调试时发现一个小小的问题，代码如下</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;<span class="attr">key1</span>: <span class="string">'val1'</span>, <span class="attr">key2</span>: <span class="string">'val2'</span>&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br><span class="line">a.key3 = <span class="string">'val3'</span></span><br><span class="line"><span class="built_in">console</span>.log(a)</span><br></pre></td></tr></table></figure>
 <p>问题当然不会是console输出什么，奇怪的点在于下边这个三角符号</p>
 <p><img src="/images/1803/chrome/key.png" alt="控制台中三角符号未打开状态"></p>
 <p>看起来似乎没有什么问题，那么打开呢？</p>
 <p><img src="/images/1803/chrome/key-open.png" alt="控制台中三角符号打开状态"></p>
 <a id="more"></a>
-<p>很奇怪为什么打开三角符号之后，显示的对象值均为修改过后的，毫无疑问这种表现是会影响到我们的判断，后经过一番查询，大致确认，打开三角符号来查询对象属性是一种惰性的行为，在<a href="https://stackoverflow.com/questions/4057440/is-chromes-javascript-console-lazy-about-evaluating-arrays" target="_blank" rel="noopener">stackoverflow的一个回答中</a>也有类似的解释</p>
+<p>很奇怪为什么打开三角符号之后，显示的对象值均为修改过后的，毫无疑问这种表现是会影响到我们的判断，后经过一番查询，大致确认，打开三角符号来查询对象属性是一种惰性的行为，当你点击三角符号的那一刻，chrome才会在内存中寻找对象的真实信息，所以当我们打开三角符号的时候，对象其实已经改变，在<a href="https://stackoverflow.com/questions/4057440/is-chromes-javascript-console-lazy-about-evaluating-arrays" target="_blank" rel="noopener">stackoverflow的一个回答中</a>也有类似的解释</p>
 <p>能够合理去除这种疑惑的方式之一就是将引用类型转变为简单的值，抛砖引玉，JSON.stringify()即可。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;<span class="attr">key1</span>: <span class="string">'val1'</span>, <span class="attr">key2</span>: <span class="string">'val2'</span>&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(a))</span><br><span class="line">a.key3 = <span class="string">'val3'</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(a))</span><br></pre></td></tr></table></figure>
 <p>再次打印，是不是消除了我们的疑惑~</p>
