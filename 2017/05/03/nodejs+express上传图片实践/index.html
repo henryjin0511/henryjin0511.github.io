@@ -1,0 +1,812 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="express,nodejs,上传图片," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="近期在总结项目时，偶然翻起之前做过的一个资料进件的上传模块，前台采用vue构建，后台则是php接收，由于项目类似单页应用，大部分数据均在本地完成操作，最终提交时将整个json数据上传即可，所以萌生兴趣想要利用vue全家桶和express框架进行一次整体实现，以下则是express框架上传图片并且添加验证的部分。  使用工具 Express: 基于 Node.js 平台，快速、开放、极简的 web">
+<meta name="keywords" content="express,nodejs,上传图片">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs+express上传图片实践">
+<meta property="og:url" content="http://yoursite.com/2017/05/03/nodejs+express上传图片实践/index.html">
+<meta property="og:site_name" content="Wild World">
+<meta property="og:description" content="近期在总结项目时，偶然翻起之前做过的一个资料进件的上传模块，前台采用vue构建，后台则是php接收，由于项目类似单页应用，大部分数据均在本地完成操作，最终提交时将整个json数据上传即可，所以萌生兴趣想要利用vue全家桶和express框架进行一次整体实现，以下则是express框架上传图片并且添加验证的部分。  使用工具 Express: 基于 Node.js 平台，快速、开放、极简的 web">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-09T03:18:20.461Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs+express上传图片实践">
+<meta name="twitter:description" content="近期在总结项目时，偶然翻起之前做过的一个资料进件的上传模块，前台采用vue构建，后台则是php接收，由于项目类似单页应用，大部分数据均在本地完成操作，最终提交时将整个json数据上传即可，所以萌生兴趣想要利用vue全家桶和express框架进行一次整体实现，以下则是express框架上传图片并且添加验证的部分。  使用工具 Express: 基于 Node.js 平台，快速、开放、极简的 web">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/03/nodejs+express上传图片实践/"/>
+
+
+
+
+
+  <title> nodejs+express上传图片实践 | Wild World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70b59a38f6518da860deede23c35ce4c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wild World</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">JM Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/03/nodejs+express上传图片实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JM">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wild World">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                nodejs+express上传图片实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-03T10:05:25+08:00">
+                2017-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nodejs/" itemprop="url" rel="index">
+                    <span itemprop="name">nodejs</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>近期在总结项目时，偶然翻起之前做过的一个资料进件的上传模块，前台采用vue构建，后台则是php接收，由于项目类似单页应用，大部分数据均在本地完成操作，最终提交时将整个json数据上传即可，所以萌生兴趣想要利用vue全家桶和express框架进行一次整体实现，以下则是express框架上传图片并且添加验证的部分。</p>
+</blockquote>
+<h2 id="使用工具"><a href="#使用工具" class="headerlink" title="使用工具"></a>使用工具</h2><ul>
+<li>Express: 基于 Node.js 平台，快速、开放、极简的 web 开发框架。</li>
+<li>Postman: 网页调试与发送网页HTTP请求的Chrome插件，主要用于测试</li>
+</ul>
+<a id="more"></a>
+<h2 id="express框架安装"><a href="#express框架安装" class="headerlink" title="express框架安装"></a>express框架安装</h2><p><a href="http://www.expressjs.com.cn/starter/installing.html" target="_blank" rel="noopener">安装链接</a></p>
+<h2 id="安装文件处理插件"><a href="#安装文件处理插件" class="headerlink" title="安装文件处理插件"></a>安装文件处理插件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install multer --save</span><br></pre></td></tr></table></figure>
+<p>express原生不支持<code>multipart/form-data</code>数据的格式化，multer是一款第三方express中间件，可以帮助我们更加快速的处理file文件的上传，用法也并不复杂，这里取官网上常用的三种情况做简单说明，另附<a href="https://www.npmjs.com/package/multer" target="_blank" rel="noopener">npm包介绍链接</a>，<a href="https://github.com/expressjs/multer/blob/master/doc/README-zh-cn.md" target="_blank" rel="noopener">官网中文说明</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>)</span><br><span class="line"><span class="keyword">var</span> multer  = <span class="built_in">require</span>(<span class="string">'multer'</span>)</span><br><span class="line"><span class="keyword">var</span> upload = multer(&#123; <span class="attr">dest</span>: <span class="string">'uploads/'</span> &#125;)	<span class="comment">//缓存文件夹</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> app = express()</span><br><span class="line"> </span><br><span class="line">app.post(<span class="string">'/profile'</span>, upload.single(<span class="string">'avatar'</span>), <span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// req.file 是key为avatar的文件信息</span></span><br><span class="line">  <span class="comment">// req.body 是其他非文件字段的对象集合，没有则为&#123;&#125;</span></span><br><span class="line">&#125;)</span><br><span class="line"> </span><br><span class="line">app.post(<span class="string">'/photos/upload'</span>, upload.array(<span class="string">'photos'</span>, <span class="number">12</span>), <span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// req.files 是key为photos的文件数组的信息</span></span><br><span class="line">  <span class="comment">// req.body 是其他非文件字段的对象集合，没有则为&#123;&#125;</span></span><br><span class="line">&#125;)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> cpUpload = upload.fields([&#123; <span class="attr">name</span>: <span class="string">'avatar'</span>, <span class="attr">maxCount</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">name</span>: <span class="string">'gallery'</span>, <span class="attr">maxCount</span>: <span class="number">8</span> &#125;])</span><br><span class="line">app.post(<span class="string">'/cool-profile'</span>, cpUpload, <span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// req.files 是一个对象,键是文件名, 值是文件数组</span></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  <span class="comment">// 例如：</span></span><br><span class="line">  <span class="comment">//  req.files['avatar'][0] -&gt; File</span></span><br><span class="line">  <span class="comment">//  req.files['gallery'] -&gt; Array</span></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  <span class="comment">// req.body 是其他非文件字段的对象集合，没有则为&#123;&#125;</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="安装图片宽高处理插件"><a href="#安装图片宽高处理插件" class="headerlink" title="安装图片宽高处理插件"></a>安装图片宽高处理插件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install image-size --save</span><br></pre></td></tr></table></figure>
+<p>由于项目中后台只负责验证图片宽高是否超过限制，并不对图片做处理，所以选择了<a href="https://www.npmjs.com/package/image-size" target="_blank" rel="noopener">image-size</a>，支持常规BMP，GIF，JPEG，PNG，PSD，TIFF，WebP，SVG文件宽高的获取，使用方法较为简单，以下为同步写法，异步写法可直接在官网查询。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sizeOf = <span class="built_in">require</span>(<span class="string">'image-size'</span>);</span><br><span class="line"><span class="keyword">var</span> dimensions = sizeOf(<span class="string">'images/funny-cats.png'</span>);	<span class="comment">//图片路径</span></span><br><span class="line"><span class="built_in">console</span>.log(dimensions.width, dimensions.height);</span><br></pre></td></tr></table></figure>
+<p>注：image-size并不需要结合express使用，直接结合原生node.js也可直接使用</p>
+<h2 id="项目实战"><a href="#项目实战" class="headerlink" title="项目实战"></a>项目实战</h2><p>以下为express的项目目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── app.js	-change/修改</span><br><span class="line">├── bin</span><br><span class="line">│   └── www</span><br><span class="line">├── package.json</span><br><span class="line">├── public</span><br><span class="line">│   ├── images</span><br><span class="line">│   ├── javascripts</span><br><span class="line">│   └── stylesheets</span><br><span class="line">│       └── style.css</span><br><span class="line">├── routes</span><br><span class="line">│   ├── index.js</span><br><span class="line">│   |── users.js</span><br><span class="line">│   └── upload.js	-new/新增</span><br><span class="line">└── views</span><br><span class="line">    ├── error.jade</span><br><span class="line">    ├── index.jade</span><br><span class="line">    └── layout.jade</span><br></pre></td></tr></table></figure>
+<h3 id="修改-app-js"><a href="#修改-app-js" class="headerlink" title="修改./app.js"></a>修改./app.js</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//...</span></span><br><span class="line">app.use(<span class="string">'/'</span>, index);</span><br><span class="line">app.use(<span class="string">'/users'</span>, users);</span><br><span class="line">app.use(<span class="string">'/upload'</span>,upload);	<span class="comment">//新增upload</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// catch 404 and forward to error handler</span></span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+<p>定义upload中间件,捕获<code>&#39;/upload&#39;</code>路由上的事件</p>
+<h3 id="新增-routes-upload-js"><a href="#新增-routes-upload-js" class="headerlink" title="新增 ./routes/upload.js"></a>新增 ./routes/upload.js</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>),  <span class="comment">//获取path模块</span></span><br><span class="line">	fs = <span class="built_in">require</span>(<span class="string">'fs'</span>),  <span class="comment">//获取文件管理模块</span></span><br><span class="line">	express = <span class="built_in">require</span>(<span class="string">'express'</span>),  <span class="comment">//获取express模块</span></span><br><span class="line">	router = express.Router(),  <span class="comment">//获取express路由模块</span></span><br><span class="line">	multer = <span class="built_in">require</span>(<span class="string">'multer'</span>),  <span class="comment">//获取multer插件模块</span></span><br><span class="line">	upload = multer(&#123;<span class="attr">dest</span>: path.resolve(__dirname,<span class="string">'../public/cache/'</span>)&#125;),  <span class="comment">//定义multer处理程序且定义缓存路径</span></span><br><span class="line">	sizeOf = <span class="built_in">require</span>(<span class="string">'image-size'</span>),  <span class="comment">//定义获取图片宽高模块</span></span><br><span class="line">	fileSavePath = path.resolve(__dirname,<span class="string">'../public/upload/'</span>);  <span class="comment">//定义文件储存路径</span></span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/'</span>,(req,res,next)=&gt;&#123;</span><br><span class="line">	upload.single(<span class="string">'imgFile'</span>)(req,res,<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(err)&#123;</span><br><span class="line">			<span class="keyword">if</span>(err.code === <span class="string">'LIMIT_UNEXPECTED_FILE'</span>)&#123;	<span class="comment">//文件key值有误或者当调用upload.none()且上传文件时会有此错误</span></span><br><span class="line">				res.json(&#123;<span class="attr">returnCode</span>:<span class="number">1006</span>,<span class="attr">msg</span>:<span class="string">'文件有误'</span>&#125;);<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				res.json(&#123;<span class="attr">returnCode</span>:<span class="number">1007</span>,<span class="attr">msg</span>:<span class="string">'内部错误'</span>&#125;);<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">console</span>.log(req.body);</span><br><span class="line">		<span class="built_in">console</span>.log(req.file);</span><br><span class="line">		<span class="keyword">let</span> file = req.file;</span><br><span class="line">		<span class="keyword">let</span> tmp_path = req.file.path;</span><br><span class="line">		<span class="keyword">let</span> target_path = fileSavePath+<span class="string">'/'</span>+req.file.originalname;  <span class="comment">//实际项目中，文件名应重新定义防止重复</span></span><br><span class="line">		<span class="keyword">if</span>(file.size &gt; <span class="number">2</span>*<span class="number">1024</span>*<span class="number">1024</span>)&#123;</span><br><span class="line">			res.json(&#123;<span class="attr">returnCode</span>:<span class="number">1004</span>,<span class="attr">msg</span>:<span class="string">'超出大小2M'</span>&#125;);<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>([<span class="string">'image/jpeg'</span>,<span class="string">'image/jpg'</span>,<span class="string">'image/png'</span>,<span class="string">'image/gif'</span>].indexOf(file.mimetype) === <span class="number">-1</span>)&#123;</span><br><span class="line">			res.json(&#123;<span class="attr">returnCode</span>:<span class="number">1003</span>,<span class="attr">msg</span>:<span class="string">'文件类型必须为jpg,png,gif,jpeg'</span>&#125;);<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">let</span> imageSize = sizeOf(tmp_path);</span><br><span class="line">			<span class="keyword">if</span>(imageSize.width &gt; <span class="number">1024</span> || imageSize.height &gt;<span class="number">1024</span>)&#123;</span><br><span class="line">				res.json(&#123;<span class="attr">returnCode</span>:<span class="number">1005</span>,<span class="attr">msg</span>:<span class="string">'宽高1024限制'</span>&#125;);<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		(<span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">			fs.rename(tmp_path,target_path,<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">				<span class="keyword">if</span> (err) &#123;</span><br><span class="line">					<span class="keyword">if</span> (err.code === <span class="string">"ENOENT"</span>) &#123;  <span class="comment">//未创建文件夹的错误处理</span></span><br><span class="line">						fs.mkdir(fileSavePath,(err)=&gt;&#123;</span><br><span class="line">							<span class="keyword">if</span>(err)<span class="keyword">throw</span> err;</span><br><span class="line">							func();</span><br><span class="line">						&#125;);</span><br><span class="line">					&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">						fs.unlink(tmp_path,<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">							<span class="keyword">if</span>(err)<span class="keyword">throw</span> err;</span><br><span class="line">						&#125;);</span><br><span class="line">						<span class="keyword">throw</span> err;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">					res.json(&#123;<span class="attr">returnCode</span>:<span class="number">1001</span>,<span class="attr">msg</span>:<span class="string">'上传成功'</span>&#125;);<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;)();</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+<p>代码总结</p>
+<ul>
+<li>代码的大部分都在处理错误信息，稍显冗长</li>
+<li>下面的自执行函数主要是为了处理第一次上传未创建文件夹的问题，如果服务端一开始创建好文件夹，下面代码可省略大部分</li>
+<li>代码中大量引入<code>res.json();</code>是假想上传情景为异步，如果为同步上传，可自行调用其他方法处理。</li>
+</ul>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm start</span><br></pre></td></tr></table></figure>
+<p>此处建议使用chrome插件postman进行测试，快速且方便，默认端口为3000，测试时可以直接向url为<code>http://127.0.0.1:3000/upload</code>post数据即可，注意前端<code>Content-Type</code>为<code>multipart/form-data</code></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>express完美的继承了javascript语言的强扩展性，自身精简，利用各种中间件的扩展可以快速实现某个功能的扩展。此处对于文件的处理便是如此，虽然express并不提供req,files的支持，但是加入第三方中间件以后，便补足了在文件上传方面的功能。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/express/" rel="tag"># express</a>
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/上传图片/" rel="tag"># 上传图片</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/14/GULP项目自动化构建实施/" rel="next" title="GULP项目自动化构建实施">
+                <i class="fa fa-chevron-left"></i> GULP项目自动化构建实施
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/22/IE8异步上传文件/" rel="prev" title="IE8异步文件上传">
+                IE8异步文件上传 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="JM" />
+          <p class="site-author-name" itemprop="name">JM</p>
+           
+              <p class="site-description motion-element" itemprop="description">技术分享博客，侧重前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jinming6568" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用工具"><span class="nav-number">1.</span> <span class="nav-text">使用工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#express框架安装"><span class="nav-number">2.</span> <span class="nav-text">express框架安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装文件处理插件"><span class="nav-number">3.</span> <span class="nav-text">安装文件处理插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装图片宽高处理插件"><span class="nav-number">4.</span> <span class="nav-text">安装图片宽高处理插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目实战"><span class="nav-number">5.</span> <span class="nav-text">项目实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-app-js"><span class="nav-number">5.1.</span> <span class="nav-text">修改./app.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新增-routes-upload-js"><span class="nav-number">5.2.</span> <span class="nav-text">新增 ./routes/upload.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行"><span class="nav-number">5.3.</span> <span class="nav-text">运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2130932"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

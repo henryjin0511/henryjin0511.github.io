@@ -1,0 +1,827 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="异步上传文件,iframe," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="为什么要讲IE8异步文件上传现阶段浏览器环境下异步上传的方法一般有三种  flash 这种方式产生较早，阿里，百度均有相应插件可利用，优点是使用较为简单，兼容性强，只需要看几遍API就可上手，缺点则是可定制性不强，部分插件样式固定无法调整，且需要引入外部flash文件资源，整体较为笨重。（国内阿里和百度出品都已做到根据浏览器适配上传方法，在资源使用方面占有优势）。 iframe + form 模拟">
+<meta name="keywords" content="异步上传文件,iframe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IE8异步文件上传">
+<meta property="og:url" content="http://yoursite.com/2017/05/22/IE8异步上传文件/index.html">
+<meta property="og:site_name" content="Wild World">
+<meta property="og:description" content="为什么要讲IE8异步文件上传现阶段浏览器环境下异步上传的方法一般有三种  flash 这种方式产生较早，阿里，百度均有相应插件可利用，优点是使用较为简单，兼容性强，只需要看几遍API就可上手，缺点则是可定制性不强，部分插件样式固定无法调整，且需要引入外部flash文件资源，整体较为笨重。（国内阿里和百度出品都已做到根据浏览器适配上传方法，在资源使用方面占有优势）。 iframe + form 模拟">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-09T03:18:20.461Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IE8异步文件上传">
+<meta name="twitter:description" content="为什么要讲IE8异步文件上传现阶段浏览器环境下异步上传的方法一般有三种  flash 这种方式产生较早，阿里，百度均有相应插件可利用，优点是使用较为简单，兼容性强，只需要看几遍API就可上手，缺点则是可定制性不强，部分插件样式固定无法调整，且需要引入外部flash文件资源，整体较为笨重。（国内阿里和百度出品都已做到根据浏览器适配上传方法，在资源使用方面占有优势）。 iframe + form 模拟">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/22/IE8异步上传文件/"/>
+
+
+
+
+
+  <title> IE8异步文件上传 | Wild World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70b59a38f6518da860deede23c35ce4c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wild World</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">JM Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/22/IE8异步上传文件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JM">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wild World">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                IE8异步文件上传
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-22T18:09:12+08:00">
+                2017-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="为什么要讲IE8异步文件上传"><a href="#为什么要讲IE8异步文件上传" class="headerlink" title="为什么要讲IE8异步文件上传"></a>为什么要讲IE8异步文件上传</h2><p>现阶段浏览器环境下异步上传的方法一般有三种</p>
+<ol>
+<li>flash 这种方式产生较早，阿里，百度均有相应插件可利用，优点是使用较为简单，兼容性强，只需要看几遍API就可上手，缺点则是可定制性不强，部分插件样式固定无法调整，且需要引入外部flash文件资源，整体较为笨重。（国内阿里和百度出品都已做到根据浏览器适配上传方法，在资源使用方面占有优势）。</li>
+<li>iframe + form 模拟异步上传，简单来说，利用form的target属性在浏览器中提交form到iframe中，获取到iframe的body内容即是服务器响应内容，然后根据需求进一步处理即可。</li>
+<li>ajax 利用formdata对象来构建form表单直接通过XMLHttpRequest发送即可，当然，现阶段这种方法的兼容性可谓是十分之差，移动端尚可接受，PC基本可以放弃，具体兼容性问题可参考<a href="http://caniuse.com/#search=formdata" target="_blank" rel="noopener">caniuse</a></li>
+</ol>
+<p>鉴于上述情况，iframe + form 显然是当下轻量应用较为明智的选择，下面就和大家分享个人对此种方法的实践经历。</p>
+<a id="more"></a>
+<h2 id="简单实践"><a href="#简单实践" class="headerlink" title="简单实践"></a>简单实践</h2><h3 id="html部分"><a href="#html部分" class="headerlink" title="html部分"></a>html部分</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">id</span>=<span class="string">"upload_iframe"</span> <span class="attr">name</span>=<span class="string">"upload_iframe"</span> <span class="attr">style</span>=<span class="string">"display:none;"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span> <span class="attr">action</span>=<span class="string">"&lt;!--你想要上传的地址--&gt;"</span> <span class="attr">target</span>=<span class="string">"upload_iframe"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"file"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> iframe = <span class="built_in">document</span>.getElementById(<span class="string">'upload_iframe'</span>);</span><br><span class="line">iframe.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> doc = <span class="keyword">this</span>.contentDocument || <span class="keyword">this</span>.contentWindow.document;</span><br><span class="line">	<span class="keyword">var</span> data = doc.body.innerHTML</span><br><span class="line">	<span class="built_in">console</span>.log(data);  <span class="comment">//data就是服务器返回的responseText</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码就是iframe + form 组合异步上传文件的简单实现，实际运用中还需要注意以下几点。</p>
+<ol>
+<li>建议一开始给iframe加属性 data-first=”true” 防止页面初始化时触发iframe的onload函数，后续需要在form提交后将first属性置为false并且在iframe的onload事件中做出判断。</li>
+<li>由于上传时间无法确定，请在form表单的submit事件触发后增加loading效果，在iframe触发load事件后关闭即可。</li>
+</ol>
+<h2 id="封装重用"><a href="#封装重用" class="headerlink" title="封装重用"></a>封装重用</h2><p>实际开发中，上述代码已经能够满足大部分情况下的上传，但是在几个页面写完之后，不断地ctrl+c ctrl+v是否会让你感到厌倦呢，基于开发效率和代码复用性的考虑，我们应该对其进行优化。下面就是封装过程</p>
+<h3 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h3><ol>
+<li>上传，支持单页面或多页面，单上传组件和多上传组件的混用。</li>
+<li>支持回调，包括以下事件触发点</li>
+</ol>
+<ul>
+<li>上传之前</li>
+<li>上传之后</li>
+<li>上传成功</li>
+<li>上传失败</li>
+</ul>
+<p>首先，作为上传组件，上传一定是我们的核心需求，所以页面中的iframe和form元素一定是必须存在的，考虑到尽可能封装彻底，所以这两个元素由js写入html实现。实际应用中，一个页面有可能有一个或多个上传按钮，而且每个按钮对应的接口和文件字段名都不一定一致，这个时候我们应尽可能重用页面元素，所以页面中的form元素的action属性和input的name值我们都应该动态写入</p>
+<h3 id="实现分析"><a href="#实现分析" class="headerlink" title="实现分析"></a>实现分析</h3><ol>
+<li>对于支持单页面或多页面，单上传组件和多上传组件的混用，最简单的情况则是多实例，每一个实例处理一个上传按钮，但是出于对代码的封装，我们决定复用页面中的iframe和form元素，将form元素的action属性和input的name值动态写入。</li>
+<li>回调方面，在上传流程中间加入相应回调函数即可</li>
+</ol>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>具体实现如下。（以下代码均依赖于jQuery，主要是针对一些dom操作的简化，原生实现可根据代码进行轻度改造。）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上传组件</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">UploadPlugin</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.opts = &#123;</span><br><span class="line">			fileName:<span class="string">'imgFile'</span>,  <span class="comment">//上传文件name值</span></span><br><span class="line">			url:<span class="string">''</span>,  <span class="comment">//接口链接</span></span><br><span class="line">			parseJSON:<span class="literal">true</span>,  <span class="comment">//是否以json格式解析返回值，默认为true</span></span><br><span class="line">			beforeUpload:<span class="literal">null</span>,  <span class="comment">//上传之前的事件处理</span></span><br><span class="line">			complete:<span class="literal">null</span>,  <span class="comment">//完成上传</span></span><br><span class="line">			success:<span class="literal">null</span>,  <span class="comment">//上传成功（一般认为iframe触发load之后符合要求格式即为成功上传）</span></span><br><span class="line">			error:<span class="literal">null</span>  <span class="comment">//上传失败，如果iframe中body中的值不符合格式即为失败，parseJSON参数为false时不会触发此函数）</span></span><br><span class="line">		&#125;;</span><br><span class="line">		<span class="keyword">this</span>.init();</span><br><span class="line">	&#125;</span><br><span class="line">	UploadPlugin.prototype.init = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">		<span class="comment">/*构建dom*/</span></span><br><span class="line">		<span class="keyword">var</span> $form = $(<span class="string">'#uploadFileForm'</span>);</span><br><span class="line">		<span class="keyword">if</span>($form.length &gt;= <span class="number">1</span>)&#123;</span><br><span class="line">			_this.$form = $form.eq(<span class="number">0</span>);</span><br><span class="line">			_this.$input = <span class="keyword">this</span>.$form.children(<span class="string">'input'</span>).eq(<span class="number">0</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			_this.$form = $(<span class="string">'&lt;form id="uploadFileForm" enctype="multipart/form-data" method="post" target="uploadFileIframe" style="display: none;"&gt;&lt;input type="file" /&gt;&lt;/form&gt;'</span>);</span><br><span class="line">			_this.$input = <span class="keyword">this</span>.$form.children(<span class="string">'input'</span>);</span><br><span class="line">			$(<span class="string">'body'</span>).append(<span class="keyword">this</span>.$form);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">var</span> $iframe = $(<span class="string">'#uploadFileIframe'</span>);</span><br><span class="line">		<span class="keyword">if</span>($iframe.length &gt;= <span class="number">1</span>)&#123;</span><br><span class="line">			_this.$iframe = $iframe.eq(<span class="number">0</span>)</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			_this.$iframe = $(<span class="string">'&lt;iframe data-first="true" id="uploadFileIframe" name="uploadFileIframe" style="display: none;"&gt;&lt;/iframe&gt;'</span>);</span><br><span class="line">			$(<span class="string">'body'</span>).append(<span class="keyword">this</span>.$iframe);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">/*构建dom结束*/</span></span><br><span class="line">		<span class="comment">/*监听事件*/</span></span><br><span class="line">		_this.$iframe.on(<span class="string">'load'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(_this.$iframe.data(<span class="string">'first'</span>))<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			<span class="keyword">var</span> _$<span class="keyword">this</span> = $(<span class="keyword">this</span>),</span><br><span class="line">				doc = _$<span class="keyword">this</span>[<span class="number">0</span>].contentDocument || _$<span class="keyword">this</span>[<span class="number">0</span>].contentWindow.document,</span><br><span class="line">				data = doc.body.innerHTML;</span><br><span class="line">			_this.selfConfig.complete.call(_this,data);</span><br><span class="line">			<span class="keyword">if</span>(_this.selfConfig.parseJSON !== <span class="literal">true</span>)&#123;</span><br><span class="line">				_this.$input.val(<span class="string">''</span>);</span><br><span class="line">				_this.selfConfig.success.call(_this,data);</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				data = <span class="built_in">JSON</span>.parse(data);</span><br><span class="line">			&#125;<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">				_this.$input.val(<span class="string">''</span>);</span><br><span class="line">				_this.selfConfig.error.call(_this,data);</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			_this.selfConfig.success.call(_this,data);</span><br><span class="line">			_this.$input.val(<span class="string">''</span>);</span><br><span class="line">		&#125;);</span><br><span class="line">		_this.$input.on(<span class="string">'change'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(!<span class="keyword">this</span>.value)<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			_this.$iframe.data(<span class="string">'first'</span>,<span class="literal">false</span>);</span><br><span class="line">			_this.selfConfig.beforeUpload.call(_this);</span><br><span class="line">			<span class="keyword">this</span>.form.submit();</span><br><span class="line">		&#125;);</span><br><span class="line">		<span class="comment">/*监听事件结束*/</span></span><br><span class="line">	&#125;;</span><br><span class="line">	UploadPlugin.prototype.upload = <span class="function"><span class="keyword">function</span> (<span class="params">config</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> _this = <span class="keyword">this</span>;</span><br><span class="line">		_this.selfConfig = $.extend(&#123;&#125;,_this.opts,config);</span><br><span class="line">		_this.$input.attr(<span class="string">'name'</span>,_this.selfConfig.fileName);</span><br><span class="line">		_this.$form.attr(<span class="string">'action'</span>,_this.selfConfig.url);</span><br><span class="line">		_this.$input.trigger(<span class="string">'click'</span>);</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="built_in">window</span>.uploadPlugin = (<span class="function"><span class="keyword">function</span> (<span class="params">options</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> UploadPlugin(options);</span><br><span class="line">	&#125;)();</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><p>首先<code>UploadPlugin</code>对象为原生对象，使用时直接调用<code>uploadPlugin.upload(config)</code>即可（默认引入script标签时即创建了上传插件对象）。<code>config</code>为上传配置，未做全局化处理是考虑多页面之间多次调用多个接口的情况。</p>
+<p><code>config</code>配置</p>
+<ul>
+<li><code>fileName</code> 文件名</li>
+<li><code>url</code>  上传路径</li>
+<li><code>parseJSON</code>  是否json格式化</li>
+<li><code>beforeUpload</code>  上传前回调</li>
+<li><code>complete</code>  上传后回调（在success和error之前）</li>
+<li><code>success</code>  上传成功回调（成功的标准在此处为json格式）</li>
+<li><code>error</code>  （上传失败回调）</li>
+</ul>
+<h3 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h3><p>默认已引入jQuery</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"uploadBtn"</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">data-action</span>=<span class="string">"&lt;!--上传路径1--&gt;"</span>&gt;</span>点击上传<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"uploadBtn"</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">data-action</span>=<span class="string">"&lt;!--上传路径2--&gt;"</span>&gt;</span>点击上传<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"uploadBtn"</span> <span class="attr">href</span>=<span class="string">"javascript:;"</span> <span class="attr">data-action</span>=<span class="string">"&lt;!--上传路径3--&gt;"</span>&gt;</span>点击上传<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">	$(<span class="string">'.uploadBtn'</span>).on(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">		<span class="keyword">var</span> action = $(<span class="keyword">this</span>).data(<span class="string">'action'</span>);</span></span><br><span class="line"><span class="undefined">		uploadPlugin.upload(&#123;</span></span><br><span class="line"><span class="javascript">			fileName:<span class="string">'file'</span>,</span></span><br><span class="line"><span class="javascript">			url:action,  <span class="comment">//上传路径配置</span></span></span><br><span class="line"><span class="javascript">			parseJSON:<span class="literal">true</span>,  <span class="comment">//以JSON方式解析，可省略</span></span></span><br><span class="line"><span class="javascript">			beforeUpload:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">				<span class="comment">//这里可以写loading逻辑</span></span></span><br><span class="line"><span class="undefined">			&#125;,</span></span><br><span class="line"><span class="javascript">			complete:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">				<span class="comment">//这里可以取消loading逻辑</span></span></span><br><span class="line"><span class="undefined">			&#125;,</span></span><br><span class="line"><span class="javascript">			success:<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">				<span class="comment">//这里可以处理相应数据，如果开启parseJSON，那么默认为JSON.parse()后的数据</span></span></span><br><span class="line"><span class="undefined">			&#125;,</span></span><br><span class="line"><span class="javascript">			error:<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">				<span class="comment">//这里为JSON.parse失败后处理返回数据的接口</span></span></span><br><span class="line"><span class="undefined">			&#125;</span></span><br><span class="line"><span class="undefined">		&#125;);</span></span><br><span class="line"><span class="undefined">	&#125;);</span></span><br><span class="line"><span class="undefined">&#125;);</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可根据不同的业务情景创建单独的配置项</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/异步上传文件/" rel="tag"># 异步上传文件</a>
+          
+            <a href="/tags/iframe/" rel="tag"># iframe</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/03/nodejs+express上传图片实践/" rel="next" title="nodejs+express上传图片实践">
+                <i class="fa fa-chevron-left"></i> nodejs+express上传图片实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/15/chrome控制台中输出object成员信息错误分析/" rel="prev" title="chrome控制台中输出object成员信息错误分析">
+                chrome控制台中输出object成员信息错误分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="JM" />
+          <p class="site-author-name" itemprop="name">JM</p>
+           
+              <p class="site-description motion-element" itemprop="description">技术分享博客，侧重前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jinming6568" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要讲IE8异步文件上传"><span class="nav-number">1.</span> <span class="nav-text">为什么要讲IE8异步文件上传</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单实践"><span class="nav-number">2.</span> <span class="nav-text">简单实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#html部分"><span class="nav-number">2.1.</span> <span class="nav-text">html部分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装重用"><span class="nav-number">3.</span> <span class="nav-text">封装重用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求分析"><span class="nav-number">3.1.</span> <span class="nav-text">需求分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现分析"><span class="nav-number">3.2.</span> <span class="nav-text">实现分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体实现"><span class="nav-number">3.3.</span> <span class="nav-text">具体实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本介绍"><span class="nav-number">3.4.</span> <span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用案例"><span class="nav-number">3.5.</span> <span class="nav-text">使用案例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2130932"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

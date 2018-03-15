@@ -1,0 +1,809 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="rem,自适应,Webview," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本来标题是要直接命名为移动端REM布局方案，但为了突出本次方案与市面上大部分方案的不同性，所以加上2017来加以突出。  关于移动端的布局方案从早期的百分比定宽，@media根据不同页面宽度定字体大小方案转变为rem布局，前端的工作量和工作效率可谓是大大精简，但是在rem的应用中，也并不都是一帆风顺，下面就展开一些讨论，当然，结论在最后，可以直接看结论。">
+<meta name="keywords" content="rem,自适应,Webview">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动端REM布局方案2017">
+<meta property="og:url" content="http://yoursite.com/2017/04/12/移动端REM布局方案2017/index.html">
+<meta property="og:site_name" content="Wild World">
+<meta property="og:description" content="本来标题是要直接命名为移动端REM布局方案，但为了突出本次方案与市面上大部分方案的不同性，所以加上2017来加以突出。  关于移动端的布局方案从早期的百分比定宽，@media根据不同页面宽度定字体大小方案转变为rem布局，前端的工作量和工作效率可谓是大大精简，但是在rem的应用中，也并不都是一帆风顺，下面就展开一些讨论，当然，结论在最后，可以直接看结论。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-09T03:18:20.471Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="移动端REM布局方案2017">
+<meta name="twitter:description" content="本来标题是要直接命名为移动端REM布局方案，但为了突出本次方案与市面上大部分方案的不同性，所以加上2017来加以突出。  关于移动端的布局方案从早期的百分比定宽，@media根据不同页面宽度定字体大小方案转变为rem布局，前端的工作量和工作效率可谓是大大精简，但是在rem的应用中，也并不都是一帆风顺，下面就展开一些讨论，当然，结论在最后，可以直接看结论。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/12/移动端REM布局方案2017/"/>
+
+
+
+
+
+  <title> 移动端REM布局方案2017 | Wild World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70b59a38f6518da860deede23c35ce4c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wild World</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">JM Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/12/移动端REM布局方案2017/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JM">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wild World">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                移动端REM布局方案2017
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-12T20:05:25+08:00">
+                2017-04-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本来标题是要直接命名为<strong>移动端REM布局方案</strong>，但为了突出本次方案与市面上大部分方案的不同性，所以加上2017来加以突出。</p>
+</blockquote>
+<p>关于移动端的布局方案从早期的百分比定宽，<code>@media</code>根据不同页面宽度定字体大小方案转变为rem布局，前端的工作量和工作效率可谓是大大精简，但是在rem的应用中，也并不都是一帆风顺，下面就展开一些讨论，当然，结论在最后，可以直接看结论。</p>
+<a id="more"></a>
+<h2 id="旧"><a href="#旧" class="headerlink" title="旧"></a>旧</h2><p>在介绍新方法之前我们先来看现行大部分的移动端rem方案，网上随处可见的一段代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">doc, win</span>) </span>&#123;</span><br><span class="line"><span class="keyword">var</span> docEl = doc.documentElement,</span><br><span class="line">	resizeEvt = <span class="string">'orientationchange'</span> <span class="keyword">in</span> <span class="built_in">window</span> ? <span class="string">'orientationchange'</span> : <span class="string">'resize'</span>,</span><br><span class="line">	recalc = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> clientWidth = docEl.clientWidth;</span><br><span class="line">		<span class="keyword">if</span> (!clientWidth) <span class="keyword">return</span>;</span><br><span class="line">		docEl.style.fontSize = <span class="number">100</span> * (clientWidth / <span class="number">750</span>) + <span class="string">'px'</span>;  <span class="comment">//此处表示设计稿为750宽，所有PX单位除以100得出相应的REM数值</span></span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="keyword">if</span> (!doc.addEventListener) <span class="keyword">return</span>;</span><br><span class="line">	win.addEventListener(resizeEvt, recalc, <span class="literal">false</span>);</span><br><span class="line">	doc.addEventListener(<span class="string">'DOMContentLoaded'</span>, recalc, <span class="literal">false</span>);</span><br><span class="line">&#125;)(<span class="built_in">document</span>, <span class="built_in">window</span>);</span><br></pre></td></tr></table></figure></p>
+<p>这种方案原理也较为简单，根据屏幕宽度计算并设置html根元素的<code>font-size</code>，页面内长度单位均按照设计稿换算为rem。但是实践过后均会发现有一个无法解决的问题，即必须要求页面已经到达<code>DOMContendLoaded</code>阶段，实际造成的影响就是如果不加处理，页面会出现闪动，原因很简单，<code>DOMContendLoaded</code>触发时HTML已经解析完毕，此时根元素的字体还未正确设置，常见的解决方案有以下两种</p>
+<ul>
+<li>预先在CSS做计算，尽可能载入页面字体单位就近似（以下代码来源于网络，只是为了演示）</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">media</span> only screen and (max-width: <span class="number">320px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">9px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">320px</span>) and (max-width: <span class="number">352px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">10px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">352px</span>) and (max-width: <span class="number">384px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">11px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">384px</span>) and (max-width: <span class="number">416px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">12px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">416px</span>) and (max-width: <span class="number">448px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">13px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">448px</span>) and (max-width: <span class="number">480px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">14px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">480px</span>) and (max-width: <span class="number">512px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">15px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">512px</span>) and (max-width: <span class="number">544px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">16px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">544px</span>) and (max-width: <span class="number">576px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">17px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">576px</span>) and (max-width: <span class="number">608px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">18px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">608px</span>) and (max-width: <span class="number">640px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">19px</span>;&#125; &#125;</span><br><span class="line">@<span class="keyword">media</span> only screen and (min-width: <span class="number">640px</span>)&#123;<span class="selector-tag">html</span>&#123;<span class="attribute">font-size</span>: <span class="number">20px</span>;&#125; &#125;</span><br></pre></td></tr></table></figure>
+<p>这种做法如果不是特别深究是没有问题的，但是如果要求高一些，就会发现页面载入时依然有小幅度的闪动</p>
+<ul>
+<li>加入一个loading交互页面，类似于淘宝，小米手机版进入会先显示LOGO再显示页面，这样就可以很好地规避此类问题</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>最初在项目中我用来解决闪屏问题的方式很简单，就是预先设置一大部分CSS样式，尽可能还原用户体验（之所以不用类似淘宝，小米的做法，是因为涉及到交互体验的东西还是要交由产品经理决定），后来在有一天进入网易新闻手机版的时候我发现即使是rem布局方案，页面也并没有出现任何闪动，以下是我从网易首页截取的一部分核心代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Dpr = <span class="number">1</span>,</span><br><span class="line">    uAgent = <span class="built_in">window</span>.navigator.userAgent;</span><br><span class="line"><span class="keyword">var</span> isIOS = uAgent.match(<span class="regexp">/iphone/i</span>);</span><br><span class="line"><span class="keyword">var</span> isYIXIN = uAgent.match(<span class="regexp">/yixin/i</span>);</span><br><span class="line"><span class="keyword">var</span> is2345 = uAgent.match(<span class="regexp">/Mb2345/i</span>);</span><br><span class="line"><span class="keyword">var</span> ishaosou = uAgent.match(<span class="regexp">/mso_app/i</span>);</span><br><span class="line"><span class="keyword">var</span> isSogou = uAgent.match(<span class="regexp">/sogoumobilebrowser/ig</span>);</span><br><span class="line"><span class="keyword">var</span> isLiebao = uAgent.match(<span class="regexp">/liebaofast/i</span>);</span><br><span class="line"><span class="keyword">var</span> isGnbr = uAgent.match(<span class="regexp">/GNBR/i</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resizeRoot</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> wWidth = (screen.width &gt; <span class="number">0</span>) ? (<span class="built_in">window</span>.innerWidth &gt;= screen.width || <span class="built_in">window</span>.innerWidth == <span class="number">0</span>) ? screen.width :</span><br><span class="line">        <span class="built_in">window</span>.innerWidth : <span class="built_in">window</span>.innerWidth,</span><br><span class="line">        wDpr, wFsize;</span><br><span class="line">    <span class="keyword">var</span> wHeight = (screen.height &gt; <span class="number">0</span>) ? (<span class="built_in">window</span>.innerHeight &gt;= screen.height || <span class="built_in">window</span>.innerHeight == <span class="number">0</span>) ?</span><br><span class="line">        screen.height : <span class="built_in">window</span>.innerHeight : <span class="built_in">window</span>.innerHeight;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.devicePixelRatio) &#123;</span><br><span class="line">        wDpr = <span class="built_in">window</span>.devicePixelRatio;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        wDpr = isIOS ? wWidth &gt; <span class="number">818</span> ? <span class="number">3</span> : wWidth &gt; <span class="number">480</span> ? <span class="number">2</span> : <span class="number">1</span> : <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isIOS) &#123;</span><br><span class="line">        wWidth = screen.width;</span><br><span class="line">        wHeight = screen.height;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// if(window.orientation==90||window.orientation==-90)&#123;</span></span><br><span class="line">    <span class="comment">//     wWidth = wHeight;</span></span><br><span class="line">    <span class="comment">// &#125;else if((window.orientation==180||window.orientation==0))&#123;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="keyword">if</span> (wWidth &gt; wHeight) &#123;</span><br><span class="line">        wWidth = wHeight;</span><br><span class="line">    &#125;</span><br><span class="line">    wFsize = wWidth &gt; <span class="number">1080</span> ? <span class="number">144</span> : wWidth / <span class="number">7.5</span>;</span><br><span class="line">    wFsize = wFsize &gt; <span class="number">32</span> ? wFsize : <span class="number">32</span>;</span><br><span class="line">    <span class="built_in">window</span>.screenWidth_ = wWidth;</span><br><span class="line">    <span class="keyword">if</span> (isYIXIN || is2345 || ishaosou || isSogou || isLiebao || isGnbr) &#123; <span class="comment">//YIXIN 和 2345 这里有个刚调用系统浏览器时候的bug，需要一点延迟来获取</span></span><br><span class="line">        setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            wWidth = (screen.width &gt; <span class="number">0</span>) ? (<span class="built_in">window</span>.innerWidth &gt;= screen.width || <span class="built_in">window</span>.innerWidth == <span class="number">0</span>) ?</span><br><span class="line">                screen.width : <span class="built_in">window</span>.innerWidth : <span class="built_in">window</span>.innerWidth;</span><br><span class="line">            wHeight = (screen.height &gt; <span class="number">0</span>) ? (<span class="built_in">window</span>.innerHeight &gt;= screen.height || <span class="built_in">window</span>.innerHeight ==</span><br><span class="line">                <span class="number">0</span>) ? screen.height : <span class="built_in">window</span>.innerHeight : <span class="built_in">window</span>.innerHeight;</span><br><span class="line">            wFsize = wWidth &gt; <span class="number">1080</span> ? <span class="number">144</span> : wWidth / <span class="number">7.5</span>;</span><br><span class="line">            wFsize = wFsize &gt; <span class="number">32</span> ? wFsize : <span class="number">32</span>;</span><br><span class="line">            <span class="comment">// document.getElementsByTagName('html')[0].dataset.dpr = wDpr;</span></span><br><span class="line">            <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>].style.fontSize = wFsize + <span class="string">'px'</span>;</span><br><span class="line">            <span class="built_in">document</span>.getElementById(<span class="string">"fixed"</span>).style.display = <span class="string">"none"</span>;</span><br><span class="line">        &#125;, <span class="number">500</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// document.getElementsByTagName('html')[0].dataset.dpr = wDpr;</span></span><br><span class="line">        <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>].style.fontSize = wFsize + <span class="string">'px'</span>;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">"fixed"</span>).style.display = <span class="string">"none"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// alert("fz="+wFsize+";dpr="+window.devicePixelRatio+";UA="+uAgent+";width="+wWidth+";sw="+screen.width+";wiw="+window.innerWidth+";wsw="+window.screen.width+window.screen.availWidth);</span></span><br><span class="line">&#125;</span><br><span class="line">resizeRoot();</span><br></pre></td></tr></table></figure>
+<p>可以很明显看出，此段代码调用后直接运行，并没有等待<code>DOMContendLoaded</code>事件的发生，所以算是比较完美的解决了传统rem方案页面闪屏的问题，需要注意几点</p>
+<ul>
+<li>此方案中横竖屏并没有重新渲染，而是横屏模式下显示内容宽度与竖屏保持一致。</li>
+<li>方案中设计稿按照750PX来做，并且加入了当宽度大于1080PX时字体大小为144px的逻辑。</li>
+<li>方案中有一段<code>setTimeout(function () {/*计算业务逻辑*/}, 500);</code>是指在某些浏览器中，立即调用函数无法正确获取宽度，需要等待500ms重新调取。</li>
+</ul>
+<h2 id="新"><a href="#新" class="headerlink" title="新"></a>新</h2><p>参考网易的代码并不是最后的终点，在我将代码反复实践以后，发现了一个问题，可能也是网易代码中出现<code>setTimeout</code>的原因，当我把这段代码运用到混合APP的制作中时，安卓4.1-4.3的机型都出现了一个相同的问题，当我第一次创建webview并运行这段代码，页面布局布局并不会如我们所愿的正确呈现，经过调试发现，当webview第一次被创建时，安卓4.1-4.3机型上<code>window.innerWidth = 320;window.innerHeight = 240;</code>,经过Stack Overflow的查询，这个问题是确实存在的，4.4版本及以上的安卓机型和IOS机型均不会出现此类问题，于是我不负责任的猜想这也可能是网易代码中<code>setTimeout(function () {/*计算业务逻辑*/}, 500);</code>的主要问题来源，但是在APP中500ms的延迟是足以能够看出来闪屏问题的。最后，解决问题的方案就是利用浏览器线程机制，利用<code>setTimeout</code>在事件循环中不断地获取<code>window.innerWidth;window.innerHeight;</code>两个值，只要不为320和240便继续进行计算逻辑。代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">resizeRoot</span>(<span class="params"></span>)</span>&#123; </span><br><span class="line">	<span class="keyword">var</span> device_width = <span class="number">750</span>,order = <span class="number">0</span>,uAgent = <span class="built_in">window</span>.navigator.userAgent,isIOS = uAgent.match(<span class="regexp">/iphone/i</span>),wWidth,wHeight,dpr = <span class="built_in">window</span>.devicePixelRatio,wFsize;</span><br><span class="line">	(<span class="function"><span class="keyword">function</span> <span class="title">get_width</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="built_in">window</span>.innerWidth === <span class="number">320</span> &amp;&amp; <span class="built_in">window</span>.innerHeight === <span class="number">240</span> &amp;&amp; order &lt;<span class="number">20</span>)&#123;</span><br><span class="line">    		order++;</span><br><span class="line">    		setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    			get_width();</span><br><span class="line">    		&#125;,<span class="number">0</span>);</span><br><span class="line">    	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    		wWidth = (screen.width &gt; <span class="number">0</span>) ? (<span class="built_in">window</span>.innerWidth &gt;= screen.width || <span class="built_in">window</span>.innerWidth === <span class="number">0</span>) ? screen.width : <span class="built_in">window</span>.innerWidth : <span class="built_in">window</span>.innerWidth;</span><br><span class="line">			wHeight = (screen.height &gt; <span class="number">0</span>) ? (<span class="built_in">window</span>.innerHeight &gt;= screen.height || <span class="built_in">window</span>.innerHeight === <span class="number">0</span>) ? screen.height : <span class="built_in">window</span>.innerHeight : <span class="built_in">window</span>.innerHeight;</span><br><span class="line">    		<span class="keyword">if</span>(isIOS) &#123;</span><br><span class="line">		        wWidth = screen.width;</span><br><span class="line">		        wHeight = screen.height;</span><br><span class="line">		    &#125;</span><br><span class="line">		    <span class="keyword">if</span>(wWidth &gt; wHeight)&#123;</span><br><span class="line">		        wWidth = wHeight;</span><br><span class="line">		    &#125;</span><br><span class="line">		    wFsize = wWidth &gt; <span class="number">1080</span> ? <span class="number">144</span> : ((wWidth * <span class="number">100</span>) / device_width);</span><br><span class="line">		    wFsize = wFsize &gt; <span class="number">32</span> ? wFsize : <span class="number">32</span>;</span><br><span class="line">		    <span class="comment">//document.getElementsByTagName('html')[0].dataset.dpr = wDpr;</span></span><br><span class="line">		    <span class="built_in">document</span>.getElementsByTagName(<span class="string">'html'</span>)[<span class="number">0</span>].style.fontSize = wFsize + <span class="string">'px'</span>;</span><br><span class="line">		    <span class="comment">//alert("fz="+wFsize+";dpr="+window.devicePixelRatio+";UA="+uAgent+";width="+wWidth+";sw="+screen.width+";wiw="+window.innerWidth+";wsw="+window.screen.width+window.screen.availWidth);</span></span><br><span class="line">    	&#125;</span><br><span class="line">	&#125;)();</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p><code>device_width</code>参数是设计稿的宽度，可根据实际调整。</p>
+<p>此方案在ANDROID4.1+和IOS7+均测试通过，加入order是为了控制setTimeout函数不会过多影响用户体验，实际运行当中，一般来说order=3的时候window.innerWidth就能够正确获取。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rem/" rel="tag"># rem</a>
+          
+            <a href="/tags/自适应/" rel="tag"># 自适应</a>
+          
+            <a href="/tags/Webview/" rel="tag"># Webview</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/11/HTML5 Plus移动App个推配置指南/" rel="next" title="HTML5 Plus移动App个推配置指南">
+                <i class="fa fa-chevron-left"></i> HTML5 Plus移动App个推配置指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/13/基于CodeIgniter 2的前端模板生成/" rel="prev" title="基于CodeIgniter 2的前端模板生成">
+                基于CodeIgniter 2的前端模板生成 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="JM" />
+          <p class="site-author-name" itemprop="name">JM</p>
+           
+              <p class="site-description motion-element" itemprop="description">技术分享博客，侧重前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jinming6568" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#旧"><span class="nav-number">1.</span> <span class="nav-text">旧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新"><span class="nav-number">3.</span> <span class="nav-text">新</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2130932"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

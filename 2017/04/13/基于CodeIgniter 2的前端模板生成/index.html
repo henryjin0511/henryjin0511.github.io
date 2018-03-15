@@ -1,0 +1,846 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,CodeIgniter,前端模板," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="现代化网站项目构建，无非两种渲染方式，后端渲染与前台渲染，两种方式各有优劣，在此不一一列出，本文针对的则是后端渲染的方式，在长期实践中发现很多网站的后端渲染方式都存在的或多或少的问题点，所以便将项目中实践的模板方案分享出来。 首先贴出CodeIgniter-2.2.6的初始文件组织结构 12345678910111213CodeIgniter-2.2.6   |——application   |">
+<meta name="keywords" content="php,CodeIgniter,前端模板">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于CodeIgniter 2的前端模板生成">
+<meta property="og:url" content="http://yoursite.com/2017/04/13/基于CodeIgniter 2的前端模板生成/index.html">
+<meta property="og:site_name" content="Wild World">
+<meta property="og:description" content="现代化网站项目构建，无非两种渲染方式，后端渲染与前台渲染，两种方式各有优劣，在此不一一列出，本文针对的则是后端渲染的方式，在长期实践中发现很多网站的后端渲染方式都存在的或多或少的问题点，所以便将项目中实践的模板方案分享出来。 首先贴出CodeIgniter-2.2.6的初始文件组织结构 12345678910111213CodeIgniter-2.2.6   |——application   |">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-09T03:18:20.461Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于CodeIgniter 2的前端模板生成">
+<meta name="twitter:description" content="现代化网站项目构建，无非两种渲染方式，后端渲染与前台渲染，两种方式各有优劣，在此不一一列出，本文针对的则是后端渲染的方式，在长期实践中发现很多网站的后端渲染方式都存在的或多或少的问题点，所以便将项目中实践的模板方案分享出来。 首先贴出CodeIgniter-2.2.6的初始文件组织结构 12345678910111213CodeIgniter-2.2.6   |——application   |">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/13/基于CodeIgniter 2的前端模板生成/"/>
+
+
+
+
+
+  <title> 基于CodeIgniter 2的前端模板生成 | Wild World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?70b59a38f6518da860deede23c35ce4c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wild World</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">JM Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/13/基于CodeIgniter 2的前端模板生成/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JM">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wild World">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于CodeIgniter 2的前端模板生成
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-13T10:05:25+08:00">
+                2017-04-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/php/" itemprop="url" rel="index">
+                    <span itemprop="name">php</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>现代化网站项目构建，无非两种渲染方式，后端渲染与前台渲染，两种方式各有优劣，在此不一一列出，本文针对的则是后端渲染的方式，在长期实践中发现很多网站的后端渲染方式都存在的或多或少的问题点，所以便将项目中实践的模板方案分享出来。</p>
+<p>首先贴出CodeIgniter-2.2.6的初始文件组织结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CodeIgniter-2.2.6</span><br><span class="line">   |——application</span><br><span class="line">   |    ...</span><br><span class="line">   |    |——helpers</span><br><span class="line">   |    |——views</span><br><span class="line">   |    ...</span><br><span class="line">   |——system</span><br><span class="line">   |——user_guide</span><br><span class="line">   |——.gitignore</span><br><span class="line">   |——.travis.yml</span><br><span class="line">   |——index.php</span><br><span class="line">   |——license.txt</span><br><span class="line">   |——README.md</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="旧方案"><a href="#旧方案" class="headerlink" title="旧方案"></a>旧方案</h2><h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CodeIgniter-2.2.6</span><br><span class="line">   |——application</span><br><span class="line">   |    ...</span><br><span class="line">   |    |——helpers</span><br><span class="line">   |    |——views</span><br><span class="line">   |        |——index.php</span><br><span class="line">   |        |——header.php</span><br><span class="line">   |        |——footer.php</span><br><span class="line">   |        ...</span><br><span class="line">   |    ...</span><br><span class="line">   |——system</span><br><span class="line">   |——user_guide</span><br><span class="line">   |——.gitignore</span><br><span class="line">   |——.travis.yml</span><br><span class="line">   |——index.php  入口文件</span><br><span class="line">   |——license.txt</span><br><span class="line">   |——README.md</span><br></pre></td></tr></table></figure>
+<h3 id="代码组织"><a href="#代码组织" class="headerlink" title="代码组织"></a>代码组织</h3><p><code>application/views/index.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">$this</span>-&gt;load-&gt;view(<span class="string">'header'</span>);<span class="meta">?&gt;</span></span><br><span class="line">&lt;div&gt;</span><br><span class="line"><span class="comment">//页面代码</span></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">$this</span>-&gt;load-&gt;view(<span class="string">'footer'</span>);<span class="meta">?&gt;</span></span><br><span class="line">&lt;script src=<span class="string">"jquery.min.js"</span>&gt;&lt;/script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="comment">//js逻辑</span></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><code>application/views/header.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;meta charset=<span class="string">"utf-8"</span> /&gt;</span><br><span class="line">	&lt;title&gt;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;header&gt;</span><br><span class="line">	&lt;/header&gt;</span><br></pre></td></tr></table></figure>
+<p><code>application/views/footer.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">	&lt;footer&gt;</span><br><span class="line">	&lt;/footer&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="最终渲染生成页面结构（假设有第三方组件a包括a-css和a-js）"><a href="#最终渲染生成页面结构（假设有第三方组件a包括a-css和a-js）" class="headerlink" title="最终渲染生成页面结构（假设有第三方组件a包括a.css和a.js）"></a>最终渲染生成页面结构（假设有第三方组件a包括a.css和a.js）</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"a.css"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">footer</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"a.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="comment">//...</span></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h3><ol>
+<li>这种方案生成的前端代码组织并不符合前端规范，每个页面内JS代码都需要书写在<code>&lt;/html&gt;</code>标签之外，且每个页面如果引入JS插件时，其中的CSS文件部分会在<code>&lt;body&gt;</code>内加载，JS文件则在<code>&lt;html&gt;</code>外部加载，均不利于前端的性能优化。</li>
+<li>一旦网站有多种布局形式，就会产生不同的头文件和底文件。</li>
+<li>当你用大型编辑器或者自动化html压缩工具时，<code>header.php</code>和<code>footer.php</code>中的<code>&lt;html&gt;</code>和<code>&lt;body&gt;</code>的非闭合标签会导致一系列报错或是自动添加标签的错误出现。</li>
+</ol>
+<h2 id="新方案"><a href="#新方案" class="headerlink" title="新方案"></a>新方案</h2><p>基于上述情况，在结合了CI框架的类库扩展，做出了前端的模板系统，此处模拟了项目中的商城结构，所以会有<code>*_mall</code>相关字样</p>
+<h3 id="文件结构-1"><a href="#文件结构-1" class="headerlink" title="文件结构"></a>文件结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">CodeIgniter-2.2.6</span><br><span class="line">   |——application</span><br><span class="line">   |    ...</span><br><span class="line">   |    |——config</span><br><span class="line">   |        |——fe_helper.php</span><br><span class="line">   |    |——views</span><br><span class="line">   |        |——template</span><br><span class="line">   |            |——template_mall.php</span><br><span class="line">   |            |——head_mall.php</span><br><span class="line">   |            |——script_mall.php</span><br><span class="line">   |        |——mall</span><br><span class="line">   |            |——index.php</span><br><span class="line">   |        ...</span><br><span class="line">   |    ...</span><br><span class="line">   |——system</span><br><span class="line">   |——user_guide</span><br><span class="line">   |——.gitignore</span><br><span class="line">   |——.travis.yml</span><br><span class="line">   |——index.php  入口文件</span><br><span class="line">   |——license.txt</span><br><span class="line">   |——README.md</span><br></pre></td></tr></table></figure>
+<p>注意：增加了<code>application/helpers/fe_config.php</code>文件，用来配置前端模板类，注意在<code>application/config/autoload.php</code>里的<code>$autoload[&#39;helper&#39;] = array();</code>里加入我们的<code>fe</code>，即<code>$autoload[&#39;helper&#39;] = array(&#39;fe&#39;);</code></p>
+<h3 id="代码组织-1"><a href="#代码组织-1" class="headerlink" title="代码组织"></a>代码组织</h3><ul>
+<li>配置 <code>application/helpers/fe_helper.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">if</span> ( ! defined(<span class="string">'BASEPATH'</span>)) <span class="keyword">exit</span>(<span class="string">'No direct script access allowed'</span>);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	* 前端SEO CSS JS类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">front_end</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> $feConfig;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;CI = &amp; get_instance();</span><br><span class="line">		<span class="keyword">$this</span>-&gt;feConfig = <span class="keyword">array</span>(</span><br><span class="line">			<span class="comment">//全站主页</span></span><br><span class="line">			<span class="string">'index/homepage'</span>=&gt;<span class="keyword">array</span>(</span><br><span class="line">				<span class="string">'seo'</span>=&gt;<span class="keyword">array</span>(</span><br><span class="line">					<span class="string">'title'</span>=&gt;<span class="string">'测试title'</span>,</span><br><span class="line">					<span class="string">'description'</span>=&gt;<span class="string">'测试description'</span>,</span><br><span class="line">					<span class="string">'keywords'</span>=&gt;<span class="string">'测试keywords'</span></span><br><span class="line">				),</span><br><span class="line">                <span class="string">'css'</span>=&gt;<span class="keyword">array</span>(</span><br><span class="line">                    <span class="string">'https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min'</span>    <span class="comment">//单纯测试用</span></span><br><span class="line">                ),</span><br><span class="line">                <span class="string">'js'</span>=&gt;<span class="keyword">array</span>(</span><br><span class="line">                    <span class="string">'https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min'</span>    <span class="comment">//单纯测试用</span></span><br><span class="line">                )</span><br><span class="line">			)</span><br><span class="line">		);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get_seo</span><span class="params">($page_name = <span class="string">''</span>)</span></span>&#123;</span><br><span class="line">        $feConfig = <span class="keyword">$this</span>-&gt;feConfig;</span><br><span class="line">        <span class="keyword">if</span>(!$page_name) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        $seo = (<span class="keyword">isset</span>($feConfig[$page_name][<span class="string">'seo'</span>]) &amp;&amp; !<span class="keyword">empty</span>($feConfig[$page_name][<span class="string">'seo'</span>]))?$feConfig[$page_name][<span class="string">'seo'</span>]:<span class="keyword">array</span>();</span><br><span class="line">        $seo_title = (<span class="keyword">isset</span>($seo[<span class="string">'title'</span>]) &amp;&amp; !<span class="keyword">empty</span>($seo[<span class="string">'title'</span>]))?$seo[<span class="string">'title'</span>]:<span class="string">'默认标题'</span>;</span><br><span class="line">        $seo_description = (<span class="keyword">isset</span>($seo[<span class="string">'description'</span>]) &amp;&amp; !<span class="keyword">empty</span>($seo[<span class="string">'description'</span>]))?$seo[<span class="string">'description'</span>]:<span class="string">'默认标题'</span>;</span><br><span class="line">        $seo_keywords = (<span class="keyword">isset</span>($seo[<span class="string">'keywords'</span>]) &amp;&amp; !<span class="keyword">empty</span>($seo[<span class="string">'keywords'</span>]))?$seo[<span class="string">'keywords'</span>]:<span class="string">'默认标题'</span>;</span><br><span class="line">        $seo_string = <span class="string">'&lt;title&gt;'</span>.$seo_title.<span class="string">'&lt;/title&gt;&lt;meta name="description" content="'</span>.$seo_description.<span class="string">'" /&gt;&lt;meta name="keywords" content="'</span>.$seo_keywords.<span class="string">'" /&gt;'</span>;</span><br><span class="line">        <span class="keyword">return</span> $seo_string;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get_css</span><span class="params">($page_name = <span class="string">''</span>)</span></span>&#123;</span><br><span class="line">		$feConfig = <span class="keyword">$this</span>-&gt;feConfig;</span><br><span class="line">		<span class="keyword">if</span>(!$page_name) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">		$css_string = <span class="string">""</span>;</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">isset</span>($feConfig[$page_name][<span class="string">'css'</span>]) &amp;&amp; !<span class="keyword">empty</span>($feConfig[$page_name][<span class="string">'css'</span>]))&#123;</span><br><span class="line">			<span class="keyword">foreach</span> ($feConfig[$page_name][<span class="string">'css'</span>] <span class="keyword">as</span> $k =&gt; $v)&#123;</span><br><span class="line">				$css_string .= (($k==<span class="number">0</span>)?<span class="string">""</span>:<span class="string">"\r\n"</span>).<span class="string">'&lt;link rel="stylesheet" href="'</span>.$v.<span class="string">'.css" /&gt;'</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> $css_string;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get_js</span><span class="params">($page_name = <span class="string">''</span>)</span></span>&#123;</span><br><span class="line">		$feConfig = <span class="keyword">$this</span>-&gt;feConfig;</span><br><span class="line">		<span class="keyword">if</span>(!$page_name) <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">		$js_string = <span class="string">""</span>;</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">isset</span>($feConfig[$page_name][<span class="string">'js'</span>]) &amp;&amp; !<span class="keyword">empty</span>($feConfig[$page_name][<span class="string">'js'</span>]))&#123;</span><br><span class="line">		    <span class="keyword">foreach</span> ($feConfig[$page_name][<span class="string">'js'</span>] <span class="keyword">as</span> $k =&gt; $v)&#123;</span><br><span class="line">				$js_string .= (($k==<span class="number">0</span>)?<span class="string">""</span>:<span class="string">"\r\n"</span>).<span class="string">'&lt;script type="text/javascript" src="'</span>.$v.<span class="string">'.js"&gt;&lt;/script&gt;'</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> $js_string;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* End of file fe_helper.php */</span></span><br><span class="line"><span class="comment">/* Location: ./application/helper/fe_helper.php */</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>案例中将前端配置直接写在了类的私有变量中，实际中可以单独整合一个json文件来储存页面相关信息</li>
+<li><p>案例中有get_seo();get_css();get_js();三个函数，实际使用中可以根据需求继续扩展</p>
+</li>
+<li><p>控制器 <code>application/controllers/mall/index.php</code></p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$data[<span class="string">'fe_file_path'</span>] = <span class="string">'mall/index'</span>;<span class="comment">//路径views内的路径地址</span></span><br><span class="line">	<span class="keyword">$this</span>-&gt;load-&gt;view(<span class="string">'template/template_mall'</span>,$data);</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>之前旧方案中没有放controllers中的文件配置，是因为之前的方法无需修改此文件，按照传统方式载入即可，这里我们载入的视图文件不再是直接的目标文件，而是载入了模板文件。</p>
+<ul>
+<li>整体模板文件<code>application/views/template_mall.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> $data[<span class="string">'feConfig'</span>] = <span class="keyword">new</span> front_end();<span class="meta">?&gt;</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">$this</span>-&gt;load-&gt;view(<span class="string">'template/head_ix'</span>,$data);<span class="meta">?&gt;</span></span><br><span class="line">&lt;body&gt;</span><br><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">$this</span>-&gt;load-&gt;view($fe_file_path);<span class="meta">?&gt;</span></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>head模板 <code>application/views/template/head_mall.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;meta charset=<span class="string">"utf-8"</span> /&gt;</span><br><span class="line">	<span class="meta">&lt;?</span>=$feConfig-&gt;get_seo($fe_file_path);<span class="meta">?&gt;</span></span><br><span class="line">	&lt;meta http-equiv=<span class="string">"X-UA-Compatible"</span> content=<span class="string">"IE=edge,chrome=1"</span> /&gt;</span><br><span class="line">	&lt;meta name=<span class="string">"renderer"</span> content=<span class="string">"webkit"</span>&gt;</span><br><span class="line">	&lt;link rel=<span class="string">"icon"</span> type=<span class="string">"image/png"</span> href=<span class="string">"/public/assets_dev/img/favicon.png"</span> /&gt;</span><br><span class="line">    &lt;!--[<span class="keyword">if</span> lt IE <span class="number">9</span>]&gt;</span><br><span class="line">    &lt;script src=<span class="string">"http://res.zuanbank.com/static/lib/js/html5shiv/3.7.2/html5shiv.min.js"</span>&gt;&lt;/script&gt;</span><br><span class="line">    &lt;![<span class="keyword">endif</span>]--&gt;</span><br><span class="line">	<span class="meta">&lt;?</span>=$feConfig-&gt;get_css($fe_file_path);<span class="meta">?&gt;</span></span><br><span class="line">&lt;/head&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>script模板 <code>application/views/template/script_mall.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"</span>&gt;&lt;/script&gt;</span><br><span class="line"><span class="meta">&lt;?</span>=$feConfig-&gt;get_js($fe_file_path);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>页面 <code>application/views/mall/index.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line"><span class="comment">//页面代码</span></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">$this</span>-&gt;load-&gt;view(<span class="string">'template/script_mall'</span>);<span class="meta">?&gt;</span></span><br><span class="line">&lt;script&gt;</span><br><span class="line">	$(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">		console.log(<span class="string">'测试'</span>);</span><br><span class="line">	&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="最终渲染生成页面结构（假设有第三方组件a包括a-css和a-js）-1"><a href="#最终渲染生成页面结构（假设有第三方组件a包括a-css和a-js）-1" class="headerlink" title="最终渲染生成页面结构（假设有第三方组件a包括a.css和a.js）"></a>最终渲染生成页面结构（假设有第三方组件a包括a.css和a.js）</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>测试title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"description"</span> <span class="attr">content</span>=<span class="string">"测试description"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"keywords"</span> <span class="attr">content</span>=<span class="string">"测试keywords"</span> /&gt;</span>	</span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge,chrome=1"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"renderer"</span> <span class="attr">content</span>=<span class="string">"webkit"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"icon"</span> <span class="attr">type</span>=<span class="string">"image/png"</span> <span class="attr">href</span>=<span class="string">"/public/assets_dev/img/favicon.png"</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--[if lt IE 9]&gt;</span></span><br><span class="line"><span class="comment">    &lt;script src="http://res.zuanbank.com/static/lib/js/html5shiv/3.7.2/html5shiv.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">    &lt;![endif]--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">footer</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(<span class="string">'测试'</span>);</span></span><br><span class="line"><span class="undefined">    &#125;)</span></span><br><span class="line"><span class="undefined">	</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="简单分析"><a href="#简单分析" class="headerlink" title="简单分析"></a>简单分析</h3><ul>
+<li>方案中利用CI中自定义的模板类，将html各个部分作为组件载入同一个模板，文件结构清晰，标签嵌套完善，符合规范。</li>
+<li>并且可以根据项目来定制多个模板，同时兼容非模板使用方法。</li>
+<li>方案中且SEO信息和静态资源都做了集中管理，通过一个文件来管理全局的SEO和静态资源载入。</li>
+<li>方案中完善了优化了html结构，即使新加入的css也可以引入到head标签中，js文件也会放在之前。</li>
+</ul>
+<p>附上据此方案制作的项目<a href="https://github.com/jinming6568/CodeIgniter-Fe-Template" target="_blank" rel="noopener">DEMO</a> </p>
+<p>需要注意的点有</p>
+<ul>
+<li><code>application/helperss/autoload</code>中<code>fe_helper.php</code></li>
+<li><code>application/config/autoload</code>中<code>$autoload[&#39;helper&#39;] = array(&#39;fe&#39;);</code></li>
+<li><code>application/controllers/</code>中mall文件夹</li>
+<li><code>application/views/</code>中mall文件夹</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+            <a href="/tags/CodeIgniter/" rel="tag"># CodeIgniter</a>
+          
+            <a href="/tags/前端模板/" rel="tag"># 前端模板</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/12/移动端REM布局方案2017/" rel="next" title="移动端REM布局方案2017">
+                <i class="fa fa-chevron-left"></i> 移动端REM布局方案2017
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/14/GULP项目自动化构建实施/" rel="prev" title="GULP项目自动化构建实施">
+                GULP项目自动化构建实施 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="JM" />
+          <p class="site-author-name" itemprop="name">JM</p>
+           
+              <p class="site-description motion-element" itemprop="description">技术分享博客，侧重前端</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jinming6568" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#旧方案"><span class="nav-number">1.</span> <span class="nav-text">旧方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件结构"><span class="nav-number">1.1.</span> <span class="nav-text">文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码组织"><span class="nav-number">1.2.</span> <span class="nav-text">代码组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终渲染生成页面结构（假设有第三方组件a包括a-css和a-js）"><span class="nav-number">1.3.</span> <span class="nav-text">最终渲染生成页面结构（假设有第三方组件a包括a.css和a.js）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题点"><span class="nav-number">1.4.</span> <span class="nav-text">问题点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新方案"><span class="nav-number">2.</span> <span class="nav-text">新方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件结构-1"><span class="nav-number">2.1.</span> <span class="nav-text">文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码组织-1"><span class="nav-number">2.2.</span> <span class="nav-text">代码组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终渲染生成页面结构（假设有第三方组件a包括a-css和a-js）-1"><span class="nav-number">2.3.</span> <span class="nav-text">最终渲染生成页面结构（假设有第三方组件a包括a.css和a.js）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单分析"><span class="nav-number">2.4.</span> <span class="nav-text">简单分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JM</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2130932"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
