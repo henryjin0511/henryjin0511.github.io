@@ -71,3 +71,5 @@ deploy:
   type: git
   repository: https://github.com/jinming6568/jinming6568.github.io
   branch: master
+  name: jinming6568
+  email: 443836568@qq.com
